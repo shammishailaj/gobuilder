@@ -2,10 +2,10 @@
 A repository to hold Dockerfile for a basic builder docker image
 
 ---
-Release 0.0.6
+Release 0.0.21
 
-Golang 1.19.4
+Golang 1.21.1
 
-Alpine: 3.17
+Alpine: 3.18
 
 [Govvv](github.com/ahmetb/govvv)
