@@ -38,9 +38,9 @@ jobs:
       with:
         images: ${{ secrets.DOCKERHUB_USERNAME }}/${{ github.event.repository.name }}
         tags: |
-          type=semver,prefix=v # Always generate semver tags
-          type=raw,value=${{ steps.get_latest_tag.outputs.tag }},enable=${{ github.event_name != 'release' }} # Use latest tag or latest on manual trigger
-          type=ref,event=release,prefix=v,enable=${{ github.event_name == 'release' }} # Only create release tag on release event
+          type=semver,prefix=v,pattern={{version}} # Added pattern here.
+          type=raw,value=${{ steps.get_latest_tag.outputs.tag }},enable=${{ github.event_name != 'release' }}
+          type=ref,event=release,prefix=v,enable=${{ github.event_name == 'release' }}
 
     - name: Build and push Docker image
       uses: docker/build-push-action@v5
