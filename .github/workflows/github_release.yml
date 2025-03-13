@@ -1,0 +1,51 @@
+name: Create GitHub Release
+
+on:
+  workflow_dispatch: # Allows manual triggering from GitHub UI
+
+jobs:
+  create_release:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Set up Git config
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+
+      - name: Get current date and time
+        id: date
+        run: echo "::set-output name=date::$(date +'%Y-%m-%dT%H:%M:%SZ')"
+
+      - name: Determine release version
+        id: version
+        run: |
+          VERSION=$(git describe --tags --abbrev=0 2>/dev/null)
+          #if [[ -z "$VERSION" ]]; then
+          #  VERSION="0.0.0" # Default if no tags exist
+          #else
+          #  # Increment patch version (example, you can customize)
+          #  VERSION=$(echo "$VERSION" | sed -E 's/([0-9]+)\.([0-9]+)\.([0-9]+)/\1.\2.$((\3+1))/')
+          #fi
+          echo "::set-output name=tag::$VERSION"
+          RNOTES=$(cat RELEASE.md)
+          echo "::set-output name=rnotes::$RNOTES"
+
+      - name: Create Release
+        id: create_release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GH_TOKEN }}
+        with:
+          tag_name: ${{ steps.version.outputs.tag }}
+          release_name: Release ${{ steps.version.outputs.tag }}
+          body: |
+            Release notes:
+            ---
+            Created At ${{ steps.date.outputs.date }}
+            ---
+            ${{ steps.version.outputs.rnotes}}
+          draft: false
+          prerelease: false
