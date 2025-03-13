@@ -22,13 +22,7 @@ jobs:
       - name: Determine release version
         id: version
         run: |
-          VERSION=$(git describe --tags --abbrev=0 2>/dev/null)
-          #if [[ -z "$VERSION" ]]; then
-          #  VERSION="0.0.0" # Default if no tags exist
-          #else
-          #  # Increment patch version (example, you can customize)
-          #  VERSION=$(echo "$VERSION" | sed -E 's/([0-9]+)\.([0-9]+)\.([0-9]+)/\1.\2.$((\3+1))/')
-          #fi
+          VERSION=$(cat VERSION)
           echo "::set-output name=tag::$VERSION"
           
       - name: Read Release Text
