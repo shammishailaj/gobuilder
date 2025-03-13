@@ -3,6 +3,8 @@ name: Docker Image Build and Push
 on:
   release:
     types: [published] # Trigger on new releases
+  
+  workflow_dispatch: # Allows manual triggering from GitHub UI
 
 jobs:
   build-and-push:
