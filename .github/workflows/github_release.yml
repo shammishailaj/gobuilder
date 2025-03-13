@@ -30,8 +30,12 @@ jobs:
           #  VERSION=$(echo "$VERSION" | sed -E 's/([0-9]+)\.([0-9]+)\.([0-9]+)/\1.\2.$((\3+1))/')
           #fi
           echo "::set-output name=tag::$VERSION"
+          
+      - name: Read Release Text
+        id: rnotes
+        run: |
           RNOTES=$(cat RELEASE.md)
-          echo "::set-output name=rnotes::$RNOTES"
+          echo "::set-output name=rnotesdata::$RNOTES"
 
       - name: Create Release
         id: create_release
@@ -46,6 +50,6 @@ jobs:
             ---
             Created At ${{ steps.date.outputs.date }}
             ---
-            ${{ steps.version.outputs.rnotes}}
+            ${{ steps.rnotes.outputs.rnotesdata}}
           draft: false
           prerelease: false
